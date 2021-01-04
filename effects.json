@@ -1,0 +1,247 @@
+{
+    "effects": [{
+        "id": 1,
+        "name": "Heal up",
+        "duration": 0
+    }, {
+        "id": 2,
+        "name": "Suicide",
+        "duration": 0
+    }, {
+        "id": 3,
+        "name": "Infinite health",
+        "duration": 90
+    }, {
+        "id": 4,
+        "name": "Wanted",
+        "duration": 0
+    }, {
+        "id": 5,
+        "name": "Only cop cars",
+        "duration": 90
+    }, {
+        "id": 6,
+        "name": "Slow down a little",
+        "duration": 90
+    }, {
+        "id": 7,
+        "name": "FOOOOONCE",
+        "duration": 90
+    }, {
+        "id": 8,
+        "name": "Nearest car explodes",
+        "duration": 0
+    }, {
+        "id": 9,
+        "name": "Have a sword",
+        "duration": 0
+    }, {
+        "id": 10,
+        "name": "Tired of running",
+        "duration": 90
+    }, {
+        "id": 11,
+        "name": "NA aim",
+        "duration": 90
+    }, {
+        "id": 12,
+        "name": "Confiscate weapons",
+        "duration": 30
+    }, {
+        "id": 13,
+        "name": "Out of the car",
+        "duration": 0
+    }, {
+        "id": 14,
+        "name": "Break current car",
+        "duration": 0
+    }, {
+        "id": 15,
+        "name": "No HUD",
+        "duration": 45
+    }, {
+        "id": 16,
+        "name": "Compass disappears",
+        "duration": 0
+    }, {
+        "id": 17,
+        "name": "Take a break",
+        "duration": 15
+    }, {
+        "id": 18,
+        "name": "Zoom out",
+        "duration": 45
+    }, {
+        "id": 19,
+        "name": "Zoom in",
+        "duration": 45
+    }, {
+        "id": 20,
+        "name": "Drunk Tommy",
+        "duration": 90
+    }, {
+        "id": 21,
+        "name": "Minimum speed limit",
+        "duration": 90
+    }, {
+        "id": 22,
+        "name": "Gas guzzler",
+        "duration": 90
+    }, {
+        "id": 23,
+        "name": "No car HUD",
+        "duration": 90
+    }, {
+        "id": 24,
+        "name": "Mini Tommy",
+        "duration": 90
+    }, {
+        "id": 25,
+        "name": "Maxi Tommy",
+        "duration": 90
+    }, {
+        "id": 26,
+        "name": "Spinning Tommy",
+        "duration": 90
+    }, {
+        "id": 27,
+        "name": "Broken gearbox",
+        "duration": 90
+    }, {
+        "id": 28,
+        "name": "Peds explode when run over",
+        "duration": 90
+    }, {
+        "id": 29,
+        "name": "Speed camera",
+        "duration": 45
+    }, {
+        "id": 30,
+        "name": "Clear active effects",
+        "duration": 0
+    }, {
+        "id": 31,
+        "name": "Blind mode",
+        "duration": 10
+    }, {
+        "id": 32,
+        "name": "First person camera",
+        "duration": 90
+    }, {
+        "id": 33,
+        "name": "Aliens!",
+        "duration": 90
+    }, {
+        "id": 34,
+        "name": "GRENADE!",
+        "duration": 0
+    }, {
+        "id": 35,
+        "name": "Nearest actor explodes",
+        "duration": 0
+    }, {
+        "id": 36,
+        "name": "Teleport to a random neighborhood",
+        "duration": 0
+    }, {
+        "id": 37,
+        "name": "Spawn a random prototype",
+        "duration": 0
+    }, {
+        "id": 38,
+        "name": "Gangsters appear",
+        "duration": 0
+    }, {
+        "id": 39,
+        "name": "Randomized city music",
+        "duration": 0
+    }, {
+        "id": 40,
+        "name": "Repair current car",
+        "duration": 0
+    }, {
+        "id": 41,
+        "name": "OHKO",
+        "duration": 30
+    }, {
+        "id": 42,
+        "name": "Tanks a lot",
+        "duration": 0
+    }, {
+        "id": 43,
+        "name": "Invisible Tommy",
+        "duration": 90
+    }, {
+        "id": 44,
+        "name": "Invisible car",
+        "duration": 90
+    }, {
+        "id": 45,
+        "name": "Car loses collisions",
+        "duration": 90
+    }, {
+        "id": 46,
+        "name": "Ghost rider",
+        "duration": 90
+    }, {
+        "id": 47,
+        "name": "Going forward locks controls",
+        "duration": 90
+    }, {
+        "id": 48,
+        "name": "Quick braking",
+        "duration": 90
+    }, {
+        "id": 49,
+        "name": "Nitroglycerin in the car",
+        "duration": 90
+    }, {
+        "id": 50,
+        "name": "Rainy weather",
+        "duration": 90
+    }, {
+        "id": 51,
+        "name": "Bolt Ace traffic",
+        "duration": 90
+    }, {
+        "id": 52,
+        "name": "Chickens!",
+        "duration": 90
+    }, {
+        "id": 53,
+        "name": "Near-sighted",
+        "duration": 90
+    }, {
+        "id": 54,
+        "name": "Far-sighted",
+        "duration": 90
+    }, {
+        "id": 55,
+        "name": "Random music",
+        "duration": 11111
+    }, {
+        "id": 56,
+        "name": "Snowy weather",
+        "duration": 90
+    }, {
+        "id": 57,
+        "name": "Honk boosting",
+        "duration": 90
+    }, {
+        "id": 58,
+        "name": "Quicksave",
+        "duration": 0
+    }, {
+        "id": 59,
+        "name": "Friendly gangsters",
+        "duration": 30
+    }, {
+        "id": 60,
+        "name": "Have guns",
+        "duration": 0
+    }, {
+        "id": 61,
+        "name": "Turn car around",
+        "duration": 0
+    }]
+}
