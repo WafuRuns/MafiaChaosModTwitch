@@ -1,0 +1,7 @@
+{
+    "IRC_TOKEN": "oauth:000000000000000000000000000000",
+    "CLIENT_ID": "000000000000000000000000000000",
+    "NICK": "bot_name",
+    "PREFIX": "!",
+    "CHANNEL": "your_channel_name"
+}
