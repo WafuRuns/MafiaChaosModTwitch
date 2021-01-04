@@ -218,7 +218,7 @@
     }, {
         "id": 55,
         "name": "Random music",
-        "duration": 11111
+        "duration": 90
     }, {
         "id": 56,
         "name": "Snowy weather",
@@ -242,6 +242,18 @@
     }, {
         "id": 61,
         "name": "Turn car around",
+        "duration": 0
+    }, {
+        "id": 62,
+        "name": "Choose a teleport",
+        "duration": 45
+    }, {
+        "id": 63,
+        "name": "No police",
+        "duration": 90
+    }, {
+        "id": 64,
+        "name": "Spawn unused car",
         "duration": 0
     }]
 }
