@@ -99,6 +99,16 @@ class Bot(commands.Bot):
                             self.blocked.remove(y)
             return sample
 
+    async def event_message(self, message):
+        if message.content[0].isnumeric():
+            vote = int(message.content[0])
+            if vote in range(1, 4):
+                if message.author.name not in self.voted:
+                    self.voted.append(message.author.name)
+                    self.votes[vote] += 1
+        await self.handle_commands(message)
+
+
     @commands.command(name='chaos_poll', aliases=['cpoll'])
     async def chaos_poll(self, ctx):
         if ctx.author.is_mod:
@@ -138,17 +148,6 @@ class Bot(commands.Bot):
     @commands.command(name='chaos_help', aliases=['chelp'])
     async def chaos_help(self, ctx):
         await ctx.send('Use !chaos_vote <1-3> or !cvote <1-3> to choose the next effect.')
-
-    @commands.command(name='chaos_vote', aliases=['cvote'])
-    async def chaos_vote(self, ctx):
-        try:
-            vote = int(ctx.message.content.split(' ')[-1])
-            if ctx.author.name not in self.voted:
-                if vote in range(1, 4):
-                    self.voted.append(ctx.author.name)
-                    self.votes[vote] += 1
-        except:
-            pass
 
     @commands.command(name='chaos_kill', aliases=['ckill'])
     async def chaos_kill(self, ctx):
