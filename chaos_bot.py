@@ -1,11 +1,13 @@
 from twitchio.ext import commands
 from pymem import Pymem
-from pymem.exception import ProcessNotFound
+from pymem.exception import CouldNotOpenProcess
 import asyncio
 import json
 import random
 import operator
 import sys
+import psutil
+import os
 from datetime import datetime, timedelta
 
 class Bot(commands.Bot):
@@ -22,6 +24,7 @@ class Bot(commands.Bot):
         self.queue = []
         self.new_poll = False
         self.stopped = False
+        self.old_pid = None
 
     async def event_ready(self):
         try:
@@ -39,8 +42,18 @@ class Bot(commands.Bot):
             await ctx.send('Started Chaos Mod.')
             print('[INFO] Started Chaos Mod')
             try:
-                p = Pymem('Game.exe')
-            except ProcessNotFound:
+                p = Pymem()
+                pid = None
+                for process in psutil.process_iter():
+                    if "Game" in process.name():
+                        pid = process.pid
+                if pid:
+                    p.open_process_from_id(pid)
+                    self.old_pid = pid
+                else:
+                    print('[ERROR] Game is not running')
+                    return
+            except CouldNotOpenProcess:
                 print('[ERROR] Game is not running')
                 return
             base = p.process_base.lpBaseOfDll
@@ -112,6 +125,11 @@ class Bot(commands.Bot):
     @commands.command(name='chaos_end', aliases=['cend'])
     async def chaos_end(self, ctx):
         if ctx.author.is_mod:
+            try:
+                os.kill(self.old_pid, 9)
+            except PermissionError:
+                print('[ERROR] Game is already dead or you don\'t have administrator privileges')
+            self.old_pid = None
             self.stopped = True
 
     @commands.command(name='chaos_help', aliases=['chelp'])
