@@ -122,9 +122,9 @@ class Bot(commands.Bot):
     async def chaos_vote(self, ctx):
         try:
             vote = int(ctx.message.content.split(' ')[-1])
-            if ctx.message.author not in self.voted:
+            if ctx.message.author.name not in self.voted:
                 if vote in range(1, 4):
-                    self.voted.append(ctx.message.author)
+                    self.voted.append(ctx.message.author.name)
                     self.votes[vote] += 1
         except:
             pass
