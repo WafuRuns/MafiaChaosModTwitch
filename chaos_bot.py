@@ -25,6 +25,7 @@ class Bot(commands.Bot):
         self.new_poll = False
         self.stopped = False
         self.old_pid = None
+        self.broadcaster = login['CHANNEL']
 
     async def event_ready(self):
         try:
@@ -37,7 +38,7 @@ class Bot(commands.Bot):
 
     @commands.command(name='chaos_start', aliases=['cstart'])
     async def chaos_start(self, ctx):
-        if ctx.author.is_mod:
+        if ctx.author.name == self.broadcaster:
             self.stopped = False
             await ctx.send('Started Chaos Mod.')
             print('[INFO] Started Chaos Mod')
@@ -126,7 +127,7 @@ class Bot(commands.Bot):
 
     @commands.command(name='chaos_end', aliases=['cend'])
     async def chaos_end(self, ctx):
-        if ctx.author.is_mod:
+        if ctx.author.name == self.broadcaster:
             try:
                 os.kill(self.old_pid, 9)
             except PermissionError:
@@ -142,12 +143,22 @@ class Bot(commands.Bot):
     async def chaos_vote(self, ctx):
         try:
             vote = int(ctx.message.content.split(' ')[-1])
-            if ctx.message.author.name not in self.voted:
+            if ctx.author.name not in self.voted:
                 if vote in range(1, 4):
-                    self.voted.append(ctx.message.author.name)
+                    self.voted.append(ctx.author.name)
                     self.votes[vote] += 1
         except:
             pass
+
+    @commands.command(name='chaos_kill', aliases=['ckill'])
+    async def chaos_kill(self, ctx):
+        if ctx.author.name == self.broadcaster:
+            try:
+                for process in psutil.process_iter():
+                    if "Game" in process.name():
+                        process.terminate()
+            except:
+                print('[ERROR] Game is already dead or you don\'t have administrator privileges')
 
 try:
     with open('login.json') as json_file:
