@@ -69,15 +69,17 @@ class Bot(commands.Bot):
                 while True and not self.stopped:
                     await asyncio.sleep(1)
                     try:
-                        val = p.read_int(pointer)
-                        for i in (0x54, 0x688, 0x4, 0x44):
-                            val = p.read_int(val + i)
-                        p.write_float(val+0x648, effect_id)
-                        p.write_float(val+0x64C, 1.0)
-                        self.blocked.append((effect, datetime.now() + timedelta(seconds=effect['duration'])))
-                        self.new_poll = True
-                        await asyncio.sleep(45)
-                        break
+                        inGame = p.read_int(base + 0x2F94BC)
+                        if not inGame:
+                            val = p.read_int(pointer)
+                            for i in (0x54, 0x688, 0x4, 0x44):
+                                val = p.read_int(val + i)
+                            p.write_float(val+0x648, effect_id)
+                            p.write_float(val+0x64C, 1.0)
+                            self.blocked.append((effect, datetime.now() + timedelta(seconds=effect['duration'])))
+                            self.new_poll = True
+                            await asyncio.sleep(45)
+                            break
                     except:
                         print('[WARN] Couldn\'t inject. If your game crashed, use !cend, restart game, then !cstart')
             await ctx.send('Ended Chaos.')
