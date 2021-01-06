@@ -31,7 +31,7 @@ class Bot(commands.Bot):
             with open('effects.json') as json_file:
                 self.data = json.load(json_file)
         except FileNotFoundError:
-            print("[ERROR] effects.json file was not found")
+            print('[ERROR] effects.json file was not found')
             input()
             sys.exit(0)
 
@@ -115,14 +115,14 @@ class Bot(commands.Bot):
                     effects = []
                     for i, effect in enumerate(sample):
                         effects.append(f"({str(i+1)}) {effect['name']}")
-                    effects_text = ", ".join(effects)
+                    effects_text = ', '.join(effects)
                     await ctx.send(effects_text)
                     await asyncio.sleep(30)
                     winner = max(self.votes.items(), key=operator.itemgetter(1))[0]
                     self.queue.append(sample[winner-1])
                     self.votes.clear()
                     self.voted.clear()
-                    await ctx.send("Voting ended.")
+                    await ctx.send('Voting ended.')
 
     @commands.command(name='chaos_end', aliases=['cend'])
     async def chaos_end(self, ctx):
@@ -130,26 +130,42 @@ class Bot(commands.Bot):
             self.stopped = True
             try:
                 for process in psutil.process_iter():
-                    if "Game" in process.name():
+                    if 'Game' in process.name():
                         process.terminate()
             except:
                 print('[ERROR] Game is already dead or you don\'t have administrator privileges')
             try:
                 self.sleep_task.cancel()
             except AttributeError:
-                print("[WARN] Trying to end when not running")
+                print('[WARN] Trying to end when not running')
 
     @commands.command(name='chaos_help', aliases=['chelp'])
     async def chaos_help(self, ctx):
         await ctx.send('Use !chaos_vote <1-3> or !cvote <1-3> to choose the next effect.')
 
+def create_login():
+    login = {}
+    login['CHANNEL'] = input('Enter your Twitch name: ')
+    login['NICK'] = input('Enter your Twitch bot name (same as your Twitch name if using only 1 account): ')
+    if login['CHANNEL'] != login['NICK']:
+        print('You are using 1 account for the bot and 1 for the stream. Do all of the things below as the bot account!')
+    login['PREFIX'] = input('Enter your command prefix (!, $, ., etc.): ')
+    print('Go to https://dev.twitch.tv/console and Register Your Application (Category must be Chat Bot, Redirect URLs must be http://localhost)')
+    login['CLIENT_ID'] = input('Click the application name, copy the Client ID, paste it here: ')
+    login['IRC_TOKEN'] = input('Go to https://twitchapps.com/tmi/, copy the token, paste it here: ')
+    with open('login.json', 'w') as json_file:
+        json.dump(login, json_file)
+
 try:
     with open('login.json') as json_file:
         login = json.load(json_file)
 except FileNotFoundError:
-    print("[ERROR] login.json file was not found")
-    input()
+    print('[ERROR] login.json file was not found')
+    create_login()
+    input('Done. Relaunch the bot.')
     sys.exit(0)
 
+print('[INFO] If your bot doesn\'t work, delete login.json file and start this program again')
+print('[INFO] You always have to run this as administrator')
 bot = Bot(login)
 bot.run()
