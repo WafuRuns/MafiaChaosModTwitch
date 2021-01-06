@@ -141,7 +141,7 @@ class Bot(commands.Bot):
 
     @commands.command(name='chaos_help', aliases=['chelp'])
     async def chaos_help(self, ctx):
-        await ctx.send('Use !chaos_vote <1-3> or !cvote <1-3> to choose the next effect.')
+        await ctx.send('Type a number between 1 and 3 to choose the next effect.')
 
 def create_login():
     login = {}
