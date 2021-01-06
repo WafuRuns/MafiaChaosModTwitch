@@ -1,13 +1,12 @@
 from twitchio.ext import commands
 from pymem import Pymem
-from pymem.exception import CouldNotOpenProcess
+from pymem.exception import ProcessNotFound
 import asyncio
 import json
 import random
 import operator
 import sys
 import psutil
-import os
 from datetime import datetime, timedelta
 
 class Bot(commands.Bot):
@@ -24,8 +23,8 @@ class Bot(commands.Bot):
         self.queue = []
         self.new_poll = False
         self.stopped = False
-        self.old_pid = None
         self.broadcaster = login['CHANNEL']
+        self.sleep_task = None
 
     async def event_ready(self):
         try:
@@ -43,31 +42,20 @@ class Bot(commands.Bot):
             await ctx.send('Started Chaos Mod.')
             print('[INFO] Started Chaos Mod')
             try:
-                p = Pymem()
-                pid = None
-                for process in psutil.process_iter():
-                    if "Game" in process.name():
-                        pid = process.pid
-                if pid:
-                    p.open_process_from_id(pid)
-                    self.old_pid = pid
-                else:
-                    print('[ERROR] Game is not running')
-                    return
-            except CouldNotOpenProcess:
+                p = Pymem('Game.exe')
+            except ProcessNotFound:
                 print('[ERROR] Game is not running')
                 return
             base = p.process_base.lpBaseOfDll
             pointer = base + 0x2F9464
-            while True and not self.stopped:
+            while not self.stopped:
                 if not self.queue:
                     effect = self.random_effects(1)[0]
-                    effect_id = float(effect['id'])
                 else:
                     effect = self.queue[0]
-                    effect_id = float(effect['id'])
                     self.queue.pop(0)
-                while True and not self.stopped:
+                effect_id = float(effect['id'])
+                while not self.stopped:
                     await asyncio.sleep(1)
                     try:
                         inGame = p.read_int(base + 0x2F94BC)
@@ -79,10 +67,11 @@ class Bot(commands.Bot):
                             p.write_float(val+0x64C, 1.0)
                             self.blocked.append((effect, datetime.now() + timedelta(seconds=effect['duration'])))
                             self.new_poll = True
-                            await asyncio.sleep(45)
+                            self.sleep_task = asyncio.create_task(asyncio.sleep(45))
+                            await asyncio.wait({self.sleep_task})
                             break
                     except:
-                        print('[WARN] Couldn\'t inject. If your game crashed, use !cend, restart game, then !cstart')
+                        print('[WARN] Couldn\'t inject. If your game crashed, use !cend, restart game, wait for "Ended Chaos" message, then !cstart')
             await ctx.send('Ended Chaos.')
             print('[INFO] Ended Chaos Mod')
     
@@ -138,32 +127,29 @@ class Bot(commands.Bot):
     @commands.command(name='chaos_end', aliases=['cend'])
     async def chaos_end(self, ctx):
         if ctx.author.name == self.broadcaster:
-            try:
-                os.kill(self.old_pid, 9)
-            except PermissionError:
-                print('[ERROR] Game is already dead or you don\'t have administrator privileges')
-            self.old_pid = None
             self.stopped = True
-
-    @commands.command(name='chaos_help', aliases=['chelp'])
-    async def chaos_help(self, ctx):
-        await ctx.send('Use !chaos_vote <1-3> or !cvote <1-3> to choose the next effect.')
-
-    @commands.command(name='chaos_kill', aliases=['ckill'])
-    async def chaos_kill(self, ctx):
-        if ctx.author.name == self.broadcaster:
             try:
                 for process in psutil.process_iter():
                     if "Game" in process.name():
                         process.terminate()
             except:
                 print('[ERROR] Game is already dead or you don\'t have administrator privileges')
+            try:
+                self.sleep_task.cancel()
+            except AttributeError:
+                print("[WARN] Trying to end when not running")
+
+    @commands.command(name='chaos_help', aliases=['chelp'])
+    async def chaos_help(self, ctx):
+        await ctx.send('Use !chaos_vote <1-3> or !cvote <1-3> to choose the next effect.')
 
 try:
     with open('login.json') as json_file:
         login = json.load(json_file)
-    bot = Bot(login)
-    bot.run()
 except FileNotFoundError:
     print("[ERROR] login.json file was not found")
     input()
+    sys.exit(0)
+
+bot = Bot(login)
+bot.run()
