@@ -14,13 +14,13 @@ Finally, you save this file, start your game and then start the bot (as an Admin
 
 ## Commands
 
-| Command           | Aliases      | Privileges | Description                                                 |
-|-------------------|--------------|------------|-------------------------------------------------------------|
-| !chaos_start      | !cstart      | Moderator  | Starts sending effects to Chaos Mod                         |
-| !chaos_end        | !cend        | Moderator  | Stops sending effects to Chaos Mod (use after game crashes) |
-| !chaos_help       | !chelp       | Anyone     | Shows help for voting                                       |
-| <1-3>             |              | Anyone     | Submits a vote for the next effect                          |
-| !chaos_poll       | !cpoll       | Moderator  | Starts posting polls and collecting votes                   |
+| Command           | Aliases      | Privileges  | Description                                                 |
+|-------------------|--------------|-------------|-------------------------------------------------------------|
+| !chaos_start      | !cstart      | Broadcaster | Starts sending effects to Chaos Mod                         |
+| !chaos_end        | !cend        | Broadcaster | Stops sending effects to Chaos Mod (use after game crashes) |
+| !chaos_help       | !chelp       | Anyone      | Shows help for voting                                       |
+| <1-3>             |              | Anyone      | Submits a vote for the next effect                          |
+| !chaos_poll       | !cpoll       | Moderator   | Starts posting polls and collecting votes                   |
 
 ## What's makejson.py for?
 
