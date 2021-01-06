@@ -37,7 +37,7 @@ class Bot(commands.Bot):
 
     @commands.command(name='chaos_start', aliases=['cstart'])
     async def chaos_start(self, ctx):
-        if ctx.author.name == self.broadcaster:
+        if ctx.author.name == self.broadcaster.lower():
             self.stopped = False
             await ctx.send('Started Chaos Mod.')
             print('[INFO] Started Chaos Mod')
@@ -126,7 +126,7 @@ class Bot(commands.Bot):
 
     @commands.command(name='chaos_end', aliases=['cend'])
     async def chaos_end(self, ctx):
-        if ctx.author.name == self.broadcaster:
+        if ctx.author.name == self.broadcaster.lower():
             self.stopped = True
             try:
                 for process in psutil.process_iter():
