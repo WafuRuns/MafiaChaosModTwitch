@@ -26,7 +26,7 @@ Finally, you save this file, start your game and then start the bot (as an Admin
 
 This file will create a new effects list from the [sheet of effects](https://docs.google.com/spreadsheets/d/1O-RrihWUizSNoTArYNuGz7bja_0ewbpXMjyf5FijBf4). You shouldn't be using this unless you're making changes to Chaos Mod.
 
-## Interaction with game
+## Interaction with the game
 
 Interaction with the game is done by injecting into the game's memory. The bot changes or reads values of Tommy's attributes, this way, the game can react to these values and vice versa. This is the list of all attributes that we might or do use.
 
