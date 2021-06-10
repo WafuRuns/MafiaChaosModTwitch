@@ -9,6 +9,7 @@ import sys
 import psutil
 from datetime import datetime, timedelta
 from math import floor
+import websockets.legacy.client
 
 class Bot(commands.Bot):
     def __init__(self, login):
