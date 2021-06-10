@@ -14,13 +14,14 @@ Finally, you save this file, start your game and then start the bot (as an Admin
 
 ## Commands
 
-| Command           | Aliases      | Privileges  | Description                                                 |
-|-------------------|--------------|-------------|-------------------------------------------------------------|
-| !chaos_start      | !cstart      | Broadcaster | Starts sending effects to Chaos Mod                         |
-| !chaos_end        | !cend        | Broadcaster | Stops sending effects to Chaos Mod (use after game crashes) |
-| !chaos_help       | !chelp       | Anyone      | Shows help for voting                                       |
-| <1-3>             |              | Anyone      | Submits a vote for the next effect                          |
-| !chaos_poll       | !cpoll       | Moderator   | Starts posting polls and collecting votes                   |
+| Command      | Aliases | Privileges  | Description                                                 |
+|--------------|---------|-------------|-------------------------------------------------------------|
+| !chaos_start | !cstart | Moderator   | Starts sending effects to Chaos Mod                         |
+| !chaos_end   | !cend   | Broadcaster | Stops sending effects to Chaos Mod (use after game crashes) |
+| !chaos_help  | !chelp  | Anyone      | Shows help for voting                                       |
+| <1-3>        |         | Anyone      | Submits a vote for the next effect                          |
+| !chaos_poll  | !cpoll  | Moderator   | Starts posting polls and collecting votes                   |
+| !chaos_setup | !csetup | Moderator   | Saves chaos mod settings from the game                      |
 
 ## What's makejson.py for?
 
@@ -43,9 +44,9 @@ Interaction with the game is done by injecting into the game's memory. The bot c
 | Intelligence | 0x2F9464 | 0x54     | 0x688    | 0x4      | 0x44     | 0x664    | Effect toggles (33–48)            |
 | Shooting     | 0x2F9464 | 0x54     | 0x688    | 0x4      | 0x44     | 0x668    | No usage                          |
 | Sight        | 0x2F9464 | 0x54     | 0x688    | 0x4      | 0x44     | 0x66C    | Effect toggles (49–64)            |
-| Hearing      | 0x2F9464 | 0x54     | 0x688    | 0x4      | 0x44     | 0x670    | Effect cooldown                   |
-| Driving      | 0x2F9464 | 0x54     | 0x688    | 0x4      | 0x44     | 0x674    | Effect duration                   |
-| Mass         | 0x2F9464 | 0x54     | 0x688    | 0x4      | 0x44     | 0x678    | No usage                          |
+| Hearing      | 0x2F9464 | 0x54     | 0x688    | 0x4      | 0x44     | 0x670    | Effect cooldown and duration      |
+| Driving      | 0x2F9464 | 0x54     | 0x688    | 0x4      | 0x44     | 0x674    | Determines the effect to be used  |
+| Mass         | 0x2F9464 | 0x54     | 0x688    | 0x4      | 0x44     | 0x678    | Flag for using chat control       |
 | Morale       | 0x2F9464 | 0x54     | 0x688    | 0x4      | 0x44     | 0x67C    | No usage                          |
 
 ## License
