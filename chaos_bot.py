@@ -8,6 +8,7 @@ import operator
 import sys
 import psutil
 from datetime import datetime, timedelta
+from math import floor
 
 class Bot(commands.Bot):
     def __init__(self, login):
@@ -25,6 +26,9 @@ class Bot(commands.Bot):
         self.stopped = False
         self.broadcaster = login['CHANNEL']
         self.sleep_task = None
+        self.toggles = ''
+        self.duration = 45
+        self.cooldown = 6.0
 
     async def event_ready(self):
         try:
@@ -35,9 +39,40 @@ class Bot(commands.Bot):
             input()
             sys.exit(0)
 
+    async def effect_cooldown(self, cooldown, process, base):
+        for _ in range(int(cooldown * 4)):
+            process.write_float(base + 0x678, 0.0)
+            await asyncio.sleep(0.25)
+
+    @commands.command(name='chaos_setup', aliases=['csetup'])
+    async def chaos_setup(self, ctx):
+        if ctx.author.is_mod:
+            try:
+                p = Pymem('Game.exe')
+                base = p.process_base.lpBaseOfDll
+                pointer = base + 0x2F9464
+                val = p.read_int(pointer)
+                for i in (0x54, 0x688, 0x4, 0x44):
+                    val = p.read_int(val + i)
+                reactions = p.read_float(val + 0x658) / 0.7
+                aggressivity = p.read_float(val + 0x660) / 0.6
+                intelligence = p.read_float(val + 0x664) / 0.8
+                sight = p.read_float(val + 0x66C)
+                for i in (reactions, aggressivity, intelligence, sight):
+                    self.toggles += bin(int(round(i)))[2:].zfill(16)[::-1]
+                hearing = p.read_float(val + 0x670)
+                self.cooldown = floor(hearing / 1000)
+                self.duration = hearing - self.cooldown * 1000
+                print(f'[INFO] Toggles set to: {self.toggles}')
+                print(f'[INFO] Cooldown set to: {self.cooldown}')
+                print(f'[INFO] Base duration set to: {self.duration}')
+            except ProcessNotFound:
+                print('[ERROR] Game is not running')
+                return
+
     @commands.command(name='chaos_start', aliases=['cstart'])
     async def chaos_start(self, ctx):
-        if ctx.author.name == self.broadcaster.lower():
+        if ctx.author.is_mod:
             self.stopped = False
             await ctx.send('Started Chaos Mod.')
             print('[INFO] Started Chaos Mod')
@@ -54,20 +89,20 @@ class Bot(commands.Bot):
                 else:
                     effect = self.queue[0]
                     self.queue.pop(0)
-                effect_id = float(effect['id'])
+                effect_id = float(effect['id']*0.008)
                 while not self.stopped:
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(0.25)
                     try:
                         inGame = p.read_int(base + 0x2F94BC)
                         if not inGame:
                             val = p.read_int(pointer)
                             for i in (0x54, 0x688, 0x4, 0x44):
                                 val = p.read_int(val + i)
-                            p.write_float(val+0x648, effect_id)
-                            p.write_float(val+0x64C, 1.0)
-                            self.blocked.append((effect, datetime.now() + timedelta(seconds=effect['duration'])))
+                            p.write_float(val + 0x678, 0.0)
+                            p.write_float(val + 0x674, effect_id)
+                            self.blocked.append((effect, datetime.now() + timedelta(seconds=effect['duration'] * self.duration * 15)))
                             self.new_poll = True
-                            self.sleep_task = asyncio.create_task(asyncio.sleep(45))
+                            self.sleep_task = asyncio.create_task(self.effect_cooldown(self.cooldown, p, val))
                             await asyncio.wait({self.sleep_task})
                             break
                     except:
@@ -76,17 +111,23 @@ class Bot(commands.Bot):
             print('[INFO] Ended Chaos Mod')
     
     def random_effects(self, count):
-        while True:
+        valid_sample = False
+        while not valid_sample:
+            valid_sample = True
             now = datetime.now()
             sample = random.sample(self.data['effects'], count)
             for i in sample:
+                if self.toggles[i['id'] - 1] == '0':
+                    valid_sample = False
+                    break
                 for y in self.blocked:
                     if i['id'] == y[0]['id']:
                         if now < y[1]:
-                            continue
+                            valid_sample = False
+                            break
                         else:
                             self.blocked.remove(y)
-            return sample
+        return sample
 
     async def event_message(self, message):
         if message.content[0].isnumeric():
@@ -117,7 +158,7 @@ class Bot(commands.Bot):
                         effects.append(f"({str(i+1)}) {effect['name']}")
                     effects_text = ', '.join(effects)
                     await ctx.send(effects_text)
-                    await asyncio.sleep(30)
+                    await asyncio.sleep(self.cooldown / 1.5)
                     winner = max(self.votes.items(), key=operator.itemgetter(1))[0]
                     self.queue.append(sample[winner-1])
                     self.votes.clear()

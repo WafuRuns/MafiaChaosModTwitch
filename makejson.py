@@ -9,7 +9,7 @@ with open('effects.csv', newline='') as csvfile:
         if i[3] == 'Instant':
             duration = 0
         else:
-            duration = int(i[3])
+            duration = float(i[3])
         data['effects'].append({
             'id': int(i[0]),
             'name': i[1],
