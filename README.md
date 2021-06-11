@@ -23,6 +23,8 @@ Finally, you save this file, start your game and then start the bot (as an Admin
 | !chaos_poll  | !cpoll  | Moderator   | Starts posting polls and collecting votes                   |
 | !chaos_setup | !csetup | Moderator   | Saves chaos mod settings from the game                      |
 
+# Info for developers
+
 ## What's makejson.py for?
 
 This file will create a new effects list from the [sheet of effects](https://docs.google.com/spreadsheets/d/1O-RrihWUizSNoTArYNuGz7bja_0ewbpXMjyf5FijBf4). You shouldn't be using this unless you're making changes to Chaos Mod.
