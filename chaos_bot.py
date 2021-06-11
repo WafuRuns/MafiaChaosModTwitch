@@ -10,6 +10,7 @@ import psutil
 from datetime import datetime, timedelta
 from math import floor
 import websockets.legacy.client
+import base64
 
 class Bot(commands.Bot):
     def __init__(self, login):
@@ -25,11 +26,12 @@ class Bot(commands.Bot):
         self.queue = []
         self.new_poll = False
         self.stopped = False
+        self.bot_name = login['NICK']
         self.broadcaster = login['CHANNEL']
         self.sleep_task = None
         self.toggles = ''
-        self.duration = 45
-        self.cooldown = 6.0
+        self.duration = 6.0
+        self.cooldown = 45
 
     async def event_ready(self):
         try:
@@ -101,6 +103,7 @@ class Bot(commands.Bot):
                             for i in (0x54, 0x688, 0x4, 0x44):
                                 val = p.read_int(val + i)
                             p.write_float(val + 0x674, effect_id)
+                            await ctx.send(f'Using effect: {effect_id}')
                             self.blocked.append((effect, datetime.now() + timedelta(seconds=effect['duration'] * self.duration * 15)))
                             self.new_poll = True
                             self.sleep_task = asyncio.create_task(self.effect_cooldown(self.cooldown))
@@ -110,6 +113,17 @@ class Bot(commands.Bot):
                         print('[WARN] Couldn\'t inject. If your game crashed, use !cend, restart game, wait for "Ended Chaos" message, then !cstart')
             await ctx.send('Ended Chaos.')
             print('[INFO] Ended Chaos Mod')
+
+    @commands.command(name='chaos_multi', aliases=['cmulti'])
+    async def chaos_multi(self, ctx):
+        msg = base64.b64encode(",".join((
+            self.broadcaster,
+            self.bot_name,
+            self.toggles,
+            str(self.duration),
+            str(self.cooldown)
+        )).encode('ascii'))
+        await ctx.send(f'Setup code for shared Chaos mod effects: {str(msg)[2:][:-1]}')
     
     def random_effects(self, count):
         valid_sample = False
