@@ -13,7 +13,7 @@ import websockets.legacy.client
 import base64
 
 class Bot(commands.Bot):
-    def __init__(self, login):
+    def __init__(self, login, shared):
         super().__init__(irc_token=login['IRC_TOKEN'],
                          client_id=login['CLIENT_ID'],
                          nick=login['NICK'],
@@ -32,6 +32,7 @@ class Bot(commands.Bot):
         self.toggles = ''
         self.duration = 6.0
         self.cooldown = 45
+        self.shared = shared
 
     async def event_ready(self):
         try:
@@ -104,7 +105,8 @@ class Bot(commands.Bot):
                             for i in (0x54, 0x688, 0x4, 0x44):
                                 val = p.read_int(val + i)
                             p.write_float(val + 0x674, effect_id)
-                            await ctx.send(f'Using effect: {effect_id}')
+                            if self.shared:
+                                await ctx.send(f'Using effect: {effect_id}')
                             self.blocked.append((effect, datetime.now() + timedelta(seconds=effect['duration'] * self.duration * 15)))
                             self.new_poll = True
                             self.sleep_task = asyncio.create_task(self.effect_cooldown(self.cooldown))
@@ -117,14 +119,17 @@ class Bot(commands.Bot):
 
     @commands.command(name='chaos_multi', aliases=['cmulti'])
     async def chaos_multi(self, ctx):
-        msg = base64.b64encode(",".join((
-            self.broadcaster,
-            self.bot_name,
-            self.toggles,
-            str(self.duration),
-            str(self.cooldown)
-        )).encode('ascii'))
-        await ctx.send(f'Setup code for shared Chaos mod effects: {str(msg)[2:][:-1]}')
+        if self.shared:
+            msg = base64.b64encode(",".join((
+                self.broadcaster,
+                self.bot_name,
+                self.toggles,
+                str(self.duration),
+                str(self.cooldown)
+            )).encode('ascii'))
+            await ctx.send(f'Setup code for shared Chaos mod effects: {str(msg)[2:][:-1]}')
+        else:
+            await ctx.send('Effect sharing is disabled.')
     
     def random_effects(self, count):
         valid_sample = False
@@ -224,5 +229,10 @@ except FileNotFoundError:
 
 print('[INFO] If your bot doesn\'t work, delete login.json file and start this program again')
 print('[INFO] You always have to run this as administrator')
-bot = Bot(login)
+shared_effects = input("Do you want to share your effects? (y/n) ")
+if shared_effects.lower() == 'y':
+    shared = True
+else:
+    shared = False
+bot = Bot(login, shared)
 bot.run()
