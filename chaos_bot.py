@@ -49,6 +49,7 @@ class Bot(commands.Bot):
     async def chaos_setup(self, ctx):
         if ctx.author.is_mod:
             try:
+                self.toggles = ''
                 p = Pymem('Game.exe')
                 base = p.process_base.lpBaseOfDll
                 pointer = base + 0x2F9464
