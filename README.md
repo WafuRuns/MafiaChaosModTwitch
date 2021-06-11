@@ -22,6 +22,7 @@ Finally, you save this file, start your game and then start the bot (as an Admin
 | <1-3>        |         | Anyone      | Submits a vote for the next effect                          |
 | !chaos_poll  | !cpoll  | Moderator   | Starts posting polls and collecting votes                   |
 | !chaos_setup | !csetup | Moderator   | Saves chaos mod settings from the game                      |
+| !chaos_multi | !cmulti | Anyone      | Shares BASE64 code for sharing chaos effects                |
 
 # Info for developers
 
