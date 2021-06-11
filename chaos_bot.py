@@ -40,10 +40,8 @@ class Bot(commands.Bot):
             input()
             sys.exit(0)
 
-    async def effect_cooldown(self, cooldown, process, base):
-        for _ in range(int(cooldown * 4)):
-            process.write_float(base + 0x678, 0.0)
-            await asyncio.sleep(0.25)
+    async def effect_cooldown(self, cooldown):
+        await asyncio.sleep(int(cooldown))
 
     @commands.command(name='chaos_setup', aliases=['csetup'])
     async def chaos_setup(self, ctx):
@@ -63,10 +61,13 @@ class Bot(commands.Bot):
                     self.toggles += bin(int(round(i)))[2:].zfill(16)[::-1]
                 hearing = p.read_float(val + 0x670)
                 self.cooldown = floor(hearing / 1000)
-                self.duration = hearing - self.cooldown * 1000
-                print(f'[INFO] Toggles set to: {self.toggles}')
-                print(f'[INFO] Cooldown set to: {self.cooldown}')
-                print(f'[INFO] Base duration set to: {self.duration}')
+                self.duration = hearing - self.cooldown * 1000 - 100
+                if self.duration < 0:
+                    print(f'[ERROR] Chaos mod is disabled in-game, turn it on and run !csetup again')
+                else:
+                    print(f'[INFO] Toggles set to: {self.toggles}')
+                    print(f'[INFO] Cooldown set to: {self.cooldown}')
+                    print(f'[INFO] Base duration set to: {self.duration}')
             except ProcessNotFound:
                 print('[ERROR] Game is not running')
                 return
@@ -99,11 +100,10 @@ class Bot(commands.Bot):
                             val = p.read_int(pointer)
                             for i in (0x54, 0x688, 0x4, 0x44):
                                 val = p.read_int(val + i)
-                            p.write_float(val + 0x678, 0.0)
                             p.write_float(val + 0x674, effect_id)
                             self.blocked.append((effect, datetime.now() + timedelta(seconds=effect['duration'] * self.duration * 15)))
                             self.new_poll = True
-                            self.sleep_task = asyncio.create_task(self.effect_cooldown(self.cooldown, p, val))
+                            self.sleep_task = asyncio.create_task(self.effect_cooldown(self.cooldown))
                             await asyncio.wait({self.sleep_task})
                             break
                     except:
