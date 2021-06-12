@@ -33,6 +33,7 @@ class Bot(commands.Bot):
         self.duration = 6.0
         self.cooldown = 45
         self.shared = shared
+        self.voting = False
 
     async def event_ready(self):
         try:
@@ -151,12 +152,13 @@ class Bot(commands.Bot):
         return sample
 
     async def event_message(self, message):
-        if message.content[0].isnumeric():
-            vote = int(message.content[0])
-            if vote in range(1, 4):
-                if message.author.name not in self.voted:
-                    self.voted.append(message.author.name)
-                    self.votes[vote] += 1
+        if self.voting:
+            if message.content[0].isnumeric():
+                vote = int(message.content[0])
+                if vote in range(1, 4):
+                    if message.author.name not in self.voted:
+                        self.voted.append(message.author.name)
+                        self.votes[vote] += 1
         await self.handle_commands(message)
 
 
@@ -178,6 +180,7 @@ class Bot(commands.Bot):
                     for i, effect in enumerate(sample):
                         effects.append(f"({str(i+1)}) {effect['name']}")
                     effects_text = ', '.join(effects)
+                    self.voting = True
                     await ctx.send(effects_text)
                     await asyncio.sleep(self.cooldown / 1.5)
                     winner = max(self.votes.items(), key=operator.itemgetter(1))[0]
@@ -185,6 +188,7 @@ class Bot(commands.Bot):
                     self.votes.clear()
                     self.voted.clear()
                     await ctx.send('Voting ended.')
+                    self.voting = False
 
     @commands.command(name='chaos_end', aliases=['cend'])
     async def chaos_end(self, ctx):
