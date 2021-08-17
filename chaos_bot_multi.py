@@ -10,7 +10,7 @@ import base64
 class Bot(commands.Bot):
     def __init__(self, login, multi_code):
         multi_code_decoded = str(base64.b64decode(multi_code))[2:][:-1].split(',')
-        super().__init__(irc_token=login['IRC_TOKEN'],
+        super().__init__(token=login['IRC_TOKEN'],
                          client_id=login['CLIENT_ID'],
                          nick=login['NICK'],
                          prefix=login['PREFIX'],
