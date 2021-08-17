@@ -14,7 +14,7 @@ import base64
 
 class Bot(commands.Bot):
     def __init__(self, login, shared):
-        super().__init__(irc_token=login['IRC_TOKEN'],
+        super().__init__(token=login['IRC_TOKEN'],
                          client_id=login['CLIENT_ID'],
                          nick=login['NICK'],
                          prefix=login['PREFIX'],
