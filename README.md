@@ -46,7 +46,6 @@ Feel free to contact me on Discord if you have any issues: wafuruns
 |--------------|---------|-------------|-------------------------------------------------------------|
 | !chaos_start | !cstart | Moderator   | Starts sending effects to Chaos Mod                         |
 | !chaos_end   | !cend   | Broadcaster | Stops sending effects to Chaos Mod (use after game crashes) |
-| !chaos_help  | !chelp  | Anyone      | Shows help for voting                                       |
 | !chaos_poll  | !cpoll  | Moderator   | Starts posting polls and collecting votes                   |
 | !chaos_setup | !csetup | Moderator   | Saves chaos mod settings from the game                      |
 

@@ -278,10 +278,6 @@ class BotCommands(commands.Component):
             except AttributeError:
                 LOGGER.warning("Trying to end when not running")
 
-    @commands.command(name="chaos_help", aliases=["chelp"])
-    async def chaos_help(self, ctx: commands.Context):
-        await ctx.send("Type a number between 1 and 3 to choose the next effect.")
-
 
 async def setup_database(
     db: asqlite.Pool,
