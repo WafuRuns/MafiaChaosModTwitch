@@ -12,7 +12,7 @@ If you're looking to just play the mod, you'll need the Twitch version of Chaos 
 
 When you first start the bot and have these things set up (remember the redirect URL is very important, otherwise it won't work), with the bot account logged in on Twitch (ideally in Incognito mode), go to http://localhost:4343/oauth?scopes=user:read:chat%20user:write:chat%20user:bot%20channel:manage:polls&force_verify=true
 
-Next, you need to authorize the bot for your account, this time you will use your regular Twitch account where you want the bot to operate, and then go to http://localhost:4343/oauth?scopes=user:read:chat%20user:write:chat%20user:bot%20channel:manage:polls&force_verify=true
+Next, you need to authorize the bot for your account, this time you will use your regular Twitch account where you want the bot to operate, and then go to http://localhost:4343/oauth?scopes=user:read:chat%20user:write:chat%20user:bot%20channel:manage:polls%20channel:bot&force_verify=true
 
 **Sometimes this simply doesn't work, because Twitch keeps old information and redirects you incorrectly. To fix that, look at the URL in your browser, you will see a client ID which will be different from the one you're trying to use. Simply change it to one of your bot and this should work. This sometimes happens when you have multiple projects in the dev console.**
 
